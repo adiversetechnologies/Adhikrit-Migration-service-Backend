@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.migration.constants.MigrationConstants;
 import com.migration.exceptionhandler.ResponseExceptionObject;
 import com.migration.primary.model.DegreeAndProgramMaintenanceEC;
 import com.migration.primary.repository.DegreeAndProgramMaintenanceRepoEC;
@@ -32,8 +33,8 @@ public class MaintenanceServiceEC {
 	 */
 	public Object maintenance(Map<String, String> allParams) {
 
-		return switch (allParams.get("type")) {
-		case "degree": {
+		return switch (allParams.get("type").toLowerCase()) {
+		case MigrationConstants.DEGREE: {
 			yield degreeDetails(allParams);
 		}
 		default:
