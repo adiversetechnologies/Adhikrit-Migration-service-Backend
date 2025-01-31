@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.migration.constants.MigrationConstants;
+import com.migration.constants.ObjectMapperInstance;
 import com.migration.exceptionhandler.ResponseExceptionObject;
 import com.migration.primary.model.DegreeAndProgramMaintenanceEC;
 import com.migration.primary.model.DegreeProgramPrimaryKeyEC;
@@ -44,7 +45,7 @@ public class MaintenanceServiceERP {
 		List<DegreeAndProgramMaintenanceERP> byRegulationAndbatch = degreeAndProgramMaintenanceRepoERP
 				.getByRegulationAndbatch(allParams.get("regulation"), allParams.get("batch"));
 		try {
-			log.info("the data from db is ===>"+ new ObjectMapper().writeValueAsString(byRegulationAndbatch));
+			log.info("the data from db is ===>"+ ObjectMapperInstance.instance().writeValueAsString(byRegulationAndbatch));
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}

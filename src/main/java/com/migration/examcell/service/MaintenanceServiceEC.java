@@ -9,8 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.migration.constants.MigrationConstants;
+import com.migration.constants.ObjectMapperInstance;
 import com.migration.exceptionhandler.ResponseExceptionObject;
 import com.migration.primary.model.DegreeAndProgramMaintenanceEC;
 import com.migration.primary.repository.DegreeAndProgramMaintenanceRepoEC;
@@ -52,7 +52,7 @@ public class MaintenanceServiceEC {
 		List<DegreeAndProgramMaintenanceEC> degreeDataOfEC = degreeAndProgramMaintenanceRepo
 				.getByRegulationAndbatch(allParams.get("regulation"), allParams.get("batch"));
 		try {
-			log.info("the data from db is ===>"+ new ObjectMapper().writeValueAsString(degreeDataOfEC));
+			log.info("the data from db is ===>"+  ObjectMapperInstance.instance().writeValueAsString(degreeDataOfEC));
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
