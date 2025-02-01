@@ -23,13 +23,13 @@ import lombok.extern.slf4j.Slf4j;
 public class MaintenanceControllerEC {
 
 	@Autowired
-	MaintenanceServiceEC maintenanceServiceEC;
-	
-	@GetMapping("/degree/detailsfromexamcell")
+	private MaintenanceServiceEC maintenanceServiceEC;
+
+	@GetMapping("/maintenance/detailsfromexamcell")
 	public ResponseEntity<Object> degreeDetailsFromExamcell(@RequestParam Map<String, String> allParams) {
 		Object responseObject;
 		try {
-			responseObject=maintenanceServiceEC.maintenance(allParams);
+			responseObject = maintenanceServiceEC.maintenance(allParams);
 			return ResponseEntity.status(HttpStatus.OK).body(responseObject);
 		} catch (ResponseExceptionObject e) {
 			log.error("Error ==>", e);
@@ -39,10 +39,8 @@ public class MaintenanceControllerEC {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
 		} catch (Exception e) {
 			log.error("Error ===>", e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
-		
 	}
-	
+
 }

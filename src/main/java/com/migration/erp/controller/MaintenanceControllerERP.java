@@ -25,7 +25,7 @@ public class MaintenanceControllerERP {
 	@Autowired
 	private MaintenanceServiceERP maintenanceServiceERP;
 
-	@GetMapping("/degree/detailsfromerp")
+	@GetMapping("/maintenance/detailsfromerp")
 	public ResponseEntity<Object> degreeDetailsFromERP(@RequestParam Map<String, String> allParams) {
 		Object responseObject;
 		try {
@@ -42,7 +42,6 @@ public class MaintenanceControllerERP {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(e.getMessage());
 		}
-
 	}
 
 }
