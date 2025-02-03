@@ -17,12 +17,15 @@ import com.migration.primary.model.CourseMasterPrimaryKeyEC;
 import com.migration.primary.model.DegreeAndProgramMaintenanceEC;
 import com.migration.primary.model.DegreeProgramPrimaryKeyEC;
 import com.migration.primary.model.FacultyDetailsEC;
+import com.migration.primary.model.StudentMasterEC;
 import com.migration.secondary.model.CourseMasterERP;
 import com.migration.secondary.model.DegreeAndProgramMaintenanceERP;
 import com.migration.secondary.model.FacultyDetailsERP;
+import com.migration.secondary.model.StudentMasterERP;
 import com.migration.secondary.repository.CourseMasterRepoERP;
 import com.migration.secondary.repository.DegreeAndProgramMaintenanceRepoERP;
 import com.migration.secondary.repository.FacultyDetailsRepoERP;
+import com.migration.secondary.repository.StudentMasterRepoERP;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,6 +41,9 @@ public class MaintenanceServiceERP {
 
 	@Autowired
 	private FacultyDetailsRepoERP facultyDetailsRepoERP;
+	
+	@Autowired
+	private StudentMasterRepoERP studentMasterRepoERP;
 
 	/**
 	 * getting data from erp too the exam cell
@@ -54,16 +60,103 @@ public class MaintenanceServiceERP {
 		case MigrationConstants.FACULTY: {
 			yield facultyDetails(allParams);
 		}
+		case MigrationConstants.STUDENT: {
+			yield studentDetails(allParams);
+		}
 		default:
 			throw new IllegalArgumentException(
 					"Unexpected value type is defined or selected : " + allParams.get("type"));
 		};
 	}
 
+	private Object studentDetails(Map<String, String> allParams) {
+		List<StudentMasterERP> byBatchAndBranch = studentMasterRepoERP.getByBatchAndBranch(allParams.get("batch"),allParams.get("branch"));
+		try {
+			log.info("the student data from db is ===>"
+					+ ObjectMapperInstance.instance().writeValueAsString(byBatchAndBranch));
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		if (byBatchAndBranch == null || byBatchAndBranch.isEmpty()) {
+			throw new ResponseExceptionObject("Data not present for the given criteria", HttpStatus.BAD_REQUEST);
+		}
+		return studentDetailsMapping(byBatchAndBranch);
+	}
+
+	private Object studentDetailsMapping(List<StudentMasterERP> byBatchAndBranch) {
+		return byBatchAndBranch.stream().map(singleData->{
+			StudentMasterEC studentMasterEC =new StudentMasterEC();
+			
+			studentMasterEC.setAdharNo(singleData.getAdharNo());
+			studentMasterEC.setAdminDate(singleData.getAdminDate());
+			studentMasterEC.setAdminNo(singleData.getAdminNo());
+			studentMasterEC.setAdmintypeCode(singleData.getAdmintypeCode());
+			studentMasterEC.setAdmissionType(singleData.getAdmissionType());
+			studentMasterEC.setBatch(singleData.getBatch());
+			studentMasterEC.setBiometricLeft(singleData.getBiometricLeft());
+			studentMasterEC.setBiometricLeftPath(singleData.getBiometricLeftPath());
+			studentMasterEC.setBiometricRight(singleData.getBiometricRight());
+			studentMasterEC.setBiometricRightPath(singleData.getBiometricRightPath());
+			studentMasterEC.setBranch(singleData.getBranch());
+			studentMasterEC.setCasteCategory(singleData.getCasteCategory());
+			studentMasterEC.setCetHollticketno(singleData.getCetHollticketno());
+			studentMasterEC.setCetid(singleData.getCetid());
+			studentMasterEC.setCetName(singleData.getCetName());
+			studentMasterEC.setCetRank(singleData.getCetRank());
+			studentMasterEC.setCmmtrackingNo(singleData.getCmmtrackingNo());
+			studentMasterEC.setCompletionYear(singleData.getCompletionYear());
+			studentMasterEC.setCourse(singleData.getCourse());
+			studentMasterEC.setDateofBirth(singleData.getDateofBirth());
+			studentMasterEC.setDateofLeaving(singleData.getDateofLeaving());
+			studentMasterEC.setDetaineeStatus(singleData.getDetaineeStatus());
+			studentMasterEC.setDiscontinueDate(singleData.getDiscontinueDate());
+			studentMasterEC.setEmailId(singleData.getEmailId());
+			studentMasterEC.setFatherAdharNo(singleData.getFatheAdharNo());
+			studentMasterEC.setFatherName(singleData.getFatherName());
+			studentMasterEC.setFeeRemibAmount(singleData.getFeeRemibAmount());
+			studentMasterEC.setFullName(singleData.getFullName());
+			studentMasterEC.setGender(singleData.getGender());
+			studentMasterEC.setHollticketNo(singleData.getHollticketNo());
+			studentMasterEC.setIdentificationMarks1(singleData.getIdentificationMarks1());
+			studentMasterEC.setIdentificationMarks2(singleData.getIdentificationMarks2());
+			studentMasterEC.setImageName(singleData.getImageName());
+			studentMasterEC.setImagepath(singleData.getImagepath());
+			studentMasterEC.setIntermarks(singleData.getInterMarks());
+			studentMasterEC.setLateralNo(singleData.getLateralNo());
+			studentMasterEC.setLevel(singleData.getLevel());
+			studentMasterEC.setMotherAdharNo(singleData.getMotherAdharNo());
+			studentMasterEC.setMotherName(singleData.getMotherName());
+			studentMasterEC.setParentEmailId(singleData.getParentEmailId());
+			studentMasterEC.setParentMobileNumber(singleData.getParentMobileNumber());
+			studentMasterEC.setParentOccupation(singleData.getParentOccupation());
+			studentMasterEC.setPctrackingNo(singleData.getPctrackingNo());
+			studentMasterEC.setRegulation(singleData.getRegulation());
+			studentMasterEC.setRollNumber(singleData.getRollNumber());
+			studentMasterEC.setScholarship(singleData.getScholarship());
+			studentMasterEC.setSectionName(singleData.getSectionName());
+			studentMasterEC.setSemester(singleData.getSemester());
+			studentMasterEC.setSshtno(singleData.getSscHtNo());
+			studentMasterEC.setStatus(singleData.getStatus());
+			studentMasterEC.setStudentBiometric(singleData.getStudentBiometric());
+			studentMasterEC.setStudentMobileNumber(singleData.getStudentMobileNumber());
+			studentMasterEC.setStudentphotofileName(singleData.getStudentphotofileName());
+			studentMasterEC.setStudentphotoPath(singleData.getStudentphotoPath());
+			studentMasterEC.setStudentsignFilename(singleData.getStudentsignFilename());
+			studentMasterEC.setStudentsignPath(singleData.getStudentsignPath());
+			studentMasterEC.setStudied_board10th(singleData.getSsc10thBoard());
+			studentMasterEC.setSubBranch(singleData.getSubBranch());
+			studentMasterEC.setUghtno(singleData.getUgHtNo());
+			studentMasterEC.setUgmarks(singleData.getUgMarks());
+			studentMasterEC.setYearofJoin(singleData.getYearofJoin());
+			
+			return studentMasterEC;
+		}).collect(Collectors.toList());
+	}
+
 	private Object facultyDetails(Map<String, String> allParams) {
 		List<FacultyDetailsERP> findAllFacultyDetails = facultyDetailsRepoERP.findAll();
 		try {
-			log.info("the data from db is ===>"
+			log.info("the faculty data from db is ===>"
 					+ ObjectMapperInstance.instance().writeValueAsString(findAllFacultyDetails));
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
@@ -107,7 +200,7 @@ public class MaintenanceServiceERP {
 		List<CourseMasterERP> byBatchProgramAndSemester = courseMasterRepoERP.getByBatchProgramAndSemester(
 				allParams.get("batch"), allParams.get("degree"), allParams.get("branch"), allParams.get("semester"));
 		try {
-			log.info("the data from db is ===>"
+			log.info("the course data from db is ===>"
 					+ ObjectMapperInstance.instance().writeValueAsString(byBatchProgramAndSemester));
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
@@ -161,7 +254,7 @@ public class MaintenanceServiceERP {
 		List<DegreeAndProgramMaintenanceERP> byRegulationAndbatch = degreeAndProgramMaintenanceRepoERP
 				.getByRegulationAndbatch(allParams.get("regulation"), allParams.get("batch"));
 		try {
-			log.info("the data from db is ===>"
+			log.info("the degree data from db is ===>"
 					+ ObjectMapperInstance.instance().writeValueAsString(byRegulationAndbatch));
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
